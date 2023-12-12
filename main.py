@@ -37,7 +37,7 @@ mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
 partidas = mongo.db.partidas
-modelo_cruzamentos = partidas.find_one({"nome": "modelo_cruzamentos"}).json()
+modelo_cruzamentos = partidas.find_one({"nome": "modelo_cruzamentos"})
 
 @app.route("/", methods=["GET"])
 def home():
@@ -219,7 +219,10 @@ def destaques_quebra_linha():
 def modelo_quebra_linha():
     if request.method == "GET":
         quebra_linha_json = partidas.find_one({"nome": "modelo_quebra_linha"})
+        quebra_linha_json['_id'] = ''
         return quebra_linha_json, 200
+    else:
+        return jsonify({"message": "Método não permitido"}), 405
 
 @app.route("/palmeiras_desfechos")
 def desfechos_palmeiras():
